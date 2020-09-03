@@ -34,7 +34,8 @@ serializeJSON = Serialize $ \case
   JSONArray  x -> runSerializer serArray  x
   JSONString x -> runSerializer serString x
   JSONBool   x -> runSerializer serBool   x
-  JSONNum    x -> runSerializer serNum    x
+  JSONInt    x -> runSerializer serInt    x
+  JSONFloat  x -> runSerializer serFloat  x
   JSONNull     -> runSerializer serNull   ()
   where
     serObject = between (S.lit "{") (S.lit "}") $
@@ -47,7 +48,9 @@ serializeJSON = Serialize $ \case
 
     serBool = (\x -> if x then "true" else "false") >$< S.text
 
-    serNum = S.serShow >|< S.serShow
+    serInt = S.serShow
+
+    serFloat = S.serShow
 
     serNull = S.lit "null"
 
